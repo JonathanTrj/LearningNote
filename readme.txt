@@ -14,4 +14,7 @@ further, git diff ,,.txt can show the changes
 3: change for checkout --
 
 git log can show the history record of git commit
-further use git log --pretty=oneline can optimize the result
+further, use git log --pretty=oneline can optimize the result
+
+git reset --hard HEAD~ can return the change to that commit result
+further, use git reset --hard ..(hashcode) can return to the specific commit result
