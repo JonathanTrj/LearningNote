@@ -20,6 +20,7 @@ git reset --hard HEAD^ can return the change to that commit result
 further, use git reset --hard ..(hashcode) can return to the specific commit result
 further, use git reflog can show the history of your operations
 
+git reset HEAD <file> can dismiss the operate of git add/rm, backward to the word directory
 if you want to return the change to last add or commit operate:
 	if you haven't git add <file>, then use git checkout -- <file>
 	if you habe git add <file>, then use git reset HEAD <file>, after that, use git checkout -- <file>
