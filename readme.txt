@@ -18,3 +18,4 @@ further, use git log --pretty=oneline can optimize the result
 
 git reset --hard HEAD^ can return the change to that commit result
 further, use git reset --hard ..(hashcode) can return to the specific commit result
+further, use git reflog can show the history of your operations
