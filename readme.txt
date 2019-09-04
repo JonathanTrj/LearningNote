@@ -30,7 +30,7 @@ git checkout -- <file> can replace the file in work directory with the file in r
 if you want to return the change to last add or commit operate:
 	if you haven't git add <file>, then use git checkout -- <file>
 	if you habe git add <file>, then use git reset HEAD <file>, after that, use git checkout -- <file>
-
+git@github.com:JonathanTrj/LearnGit.git
 //remote repository
 git remote add repo_name git@github.com:JonathanTrj/(...).git
 //push first time
@@ -55,5 +55,3 @@ git switch branch_name is supported by the high version of GIT
 git status check for the conflict files and make changes, 
 git log --graph can show the branch merge graph
 //manage of branch
-
-conflict?
