@@ -30,3 +30,28 @@ git checkout -- <file> can replace the file in work directory with the file in r
 if you want to return the change to last add or commit operate:
 	if you haven't git add <file>, then use git checkout -- <file>
 	if you habe git add <file>, then use git reset HEAD <file>, after that, use git checkout -- <file>
+git@github.com:JonathanTrj/LearnGit.git
+//remote repository
+git remote add repo_name git@github.com:JonathanTrj/(...).git
+//push first time
+git push -u repo_name branch_name(default is 'master')
+//push
+git push repo_name branch_name(default is 'master')
+//git clone
+git clone git@github.com:JonathanTrj/(...).git
+
+//branch
+//pointer HEAD point to 'master', and 'master' point to the current node in a branch
+//when create and switch to a new branch, the HEAD pointer will point to the new 'branch', and the 'branch' point to the current node of this branch
+//when merge the branch with master branch, the HEAD pointer will point to 'master' again.
+create and switch to a new branch:
+git checkout -b branch_name
+equals to: git branch branch_name & git checkout branch_name
+git branch can show the list of branches, and current branch will be displayed with a (*)
+git merge branch_name can merge the branch_name branch to the current branch
+git branch -d branch_name can delete the branch
+git switch branch_name is supported by the high version of GIT
+//when different branches' files conflict when merge:
+git status check for the conflict files and make changes, 
+git log --graph can show the branch merge graph
+//manage of branch
