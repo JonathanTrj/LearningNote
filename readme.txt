@@ -55,5 +55,50 @@ git switch branch_name is supported by the high version of GIT
 git status check for the conflict files and make changes, 
 git log --graph can show the branch merge graph
 //manage of branch
+if you want to keep the commit log of branch merge, then:
+git merge --no-ff -m <content> branch_name
+//if you want to temperary work in another branch with the unfinished work in current branch, then:
+git stash, it will temporary storage your current branch works, which makes your current work place clean
+git stash list can show the list of works
+git stash apply <stashid> & git stash drop <stashid>  /  git stash pop(this will return your work and delete the stash at the same time)
+git cherry-pick <commitID> can copy a commit to current branch
+//corporate with team
+git remote can show the remote repository info
+git remote -v can show the address of fetch and push
+git push repo_name branch_name
+git clone ...
+generally, after clone, you can only see the master branch, if you want to work in another branch in remote, then:
+git checkout -b branch_name remote_repo_name/branch_name
+git push remote_repo_name remote_branch_name
+if conflict with partner, then:
+1,conduct a connection from current branch to remote branch
+git branch --set-upstream-to=remote_repo_name/remote_branch current_branch
+2,git pull
+git pull
+//git tag
+git tag <tag_name> / git tag <tag_name> <commitID> / git tag -a <tag_name> -m <descrip> <commitID>
+git tag can show the list of tags
+git show <tag_name>
+//tag operations
+git tag -d <tag_name>
+if tag has been push to remote_repo, then:
+1,git tag -d <tag_name>
+2,git push remote_repo_name :refs/tags/<tag_name>
+git push remote_repo_name <tag_name>
+git push remote_repo_name --tags
 
-hahaah no conflict
+//.gitignore
+git check-ignore -v <file_full_name>
+
+//alias
+git config --global alias.tem_name 'operate_name'
+
+//build a GIT server
+1,sudo apt-get install git
+2,sudo adduser git
+3,import id_rsa_pub to /home/git/.ssh/authorized_keys (one line for a key)
+4,sudo git init --bare sample.git, sudo chown -R git:git sample.git
+5,forbid shell login: edit:/etc/passwd, change "git:x:1001:1001:,,,:/home/git:/bin/bash" into "git:x:1001:1001:,,,:/home/git:/usr/bin/git-shell"
+6,git clone git@server:/srv/sample.git
+7,Gitosis: manage the SSH keys
+8,Gitolite: manage the authorization
