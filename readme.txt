@@ -14,3 +14,4 @@ further, git diff ,,.txt can show the changes
 3: change for checkout --
 
 git log can show the history record of git commit
+further use git log --pretty=oneline can optimize the result
