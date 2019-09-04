@@ -9,3 +9,5 @@ further, git diff ,,.txt can show the changes
 
 1: change for checkout -- 
 
+2: change for checkout --
+
