@@ -55,3 +55,5 @@ git switch branch_name is supported by the high version of GIT
 git status check for the conflict files and make changes, 
 git log --graph can show the branch merge graph
 //manage of branch
+
+master conflict?
