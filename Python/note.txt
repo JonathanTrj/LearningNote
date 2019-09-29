@@ -1,0 +1,10 @@
+1、对于list，在同时需要index和value值的时候可以使用 enumerate() 方法进行遍历
+	for i,j in enumerate(<listObject>)
+2、os.walk 可以遍历一个路径下的所有文件，参数有 root, file
+	os.listdir(path=".")
+	或 for root, dirs, files in os.walk(rootDir)
+3、numpy 的 argmax(<listObject>) 与 argmin(<listObject>) 返回列表中最大最小元素的元素位置 index
+4、对于Python的if-else语法简写，实例如下：
+	a = 1
+	a = 10 if a == 1 else 100
+	print(a)	# a = 10

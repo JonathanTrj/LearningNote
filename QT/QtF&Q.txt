@@ -1,0 +1,10 @@
+1: QString与char*相互转换
+https://blog.csdn.net/qq_33485434/article/details/78790285
+QString2char*: std::string s = qs.toStdString(); const char* result = s.c_str();
+char*2QString: str = QString(QLatinlString(ch));
+
+2: “Could not determine which ”make“ command to run. Check the ”make“ step in the build configuration.”
+https://blog.csdn.net/qq_41068877/article/details/83340574
+
+3: warning: C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+https://www.cnblogs.com/markleaf/p/7781127.html

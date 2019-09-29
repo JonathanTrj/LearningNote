@@ -1,0 +1,7 @@
+1、要想使用 flutter-web，
+可能在 flutter SDK/.pub_cache/bin 中没有 stagehand、webdev
+或者在 C:\Users\chunpengliu\AppData\Roaming\Pub\Cache\bin 中没有stagehand、webdev
+stagehand 是创建项目必须的工具，webdev 是类似 KOA 的 web 服务器。
+如果没有 webdev，使用如下命令安装：
+flutter pub global activate webdev
+而后就 <flutter sdk>/.pub_cache/bin 添加到系统环境变量中。

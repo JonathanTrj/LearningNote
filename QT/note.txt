@@ -1,0 +1,31 @@
+1、QT中通过 c++ 调用 Python 文件与方法，并传递所需参数
+1): 在 .pro 项目文件中添加 python 路径信息
+	INCLUDEPATH += $$quote(D:/Python3.7.4-32bit/include)
+	LIBS += -L$$quote(D:/Python3.7.4-32bit/libs) -lpython37
+2): 在需要使用 Python 的文件中首先引入 Python.h 头文件
+	#include <Python.h>
+3): 进行 Python 环境初始化
+	Py_Initialize();
+4): 调用对应 Python 脚本文件
+	PyObject* pModule = PyImport_ImportModule("yourPythonScriptName");
+5): 调用 Module 中的方法
+	way 1: PyObject* pFunction = PyObject_GetAttrString(pModule, "functionName");
+	way 2: 
+		PyObject* pDict = PyModule_GetDict(pModule);
+		if(!pDict) {
+			... // error process
+		}
+		PyObject* pFunction = PyDict_GetItemString(pDict, "functionName");
+6): 无参数调用对应方法
+	PyObject* pResult = PyObject_CallFunction(pFunction, NULL);
+7): 有参数调用对应方法
+	1: 构造参数对象 args
+	PyObject* args = PyTuple_New(paramNum);
+	PyObject* arg1 = PyBytes_FromString(stringValue);	// in python, this param nees to decode() first, from bytes[] to str
+	PyObject* arg2 = PyLong_FromLong(value);
+	PyTuple_SetItem(args, 0, arg1);
+	PyTuple_SetItem(args, 1, arg2);
+	2: 调用方法，传递参数
+	PyObject* pResult = PyObject_CallObject(pFunction, args);
+8): 结束，释放 Python
+	Py_Finalize();
