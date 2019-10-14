@@ -1,7 +1,10 @@
 1: QString与char*相互转换
 https://blog.csdn.net/qq_33485434/article/details/78790285
-QString2char*: std::string s = qs.toStdString(); const char* result = s.c_str();
-char*2QString: str = QString(QLatinlString(ch));
+QString2char*: 
+	std::string s = qs.toStdString(); 
+	const char* result = s.c_str();
+char*2QString: 
+	str = QString(QLatinlString(ch));
 
 2: “Could not determine which ”make“ command to run. Check the ”make“ step in the build configuration.”
 https://blog.csdn.net/qq_41068877/article/details/83340574

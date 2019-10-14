@@ -29,3 +29,53 @@
 	PyObject* pResult = PyObject_CallObject(pFunction, args);
 8): 结束，释放 Python
 	Py_Finalize();
+
+2、多个类调用一个全局变量时：
+1): 创建一个 .h 与 .cpp 文件，命名为 GlobalVaria
+2): 在 .h 文件中，声明一个 public static 变量
+	...
+	#include "globalvaria.h"
+	...
+	class GlobalVaria
+	{
+	public:
+    	...
+    	// static QString varia;
+    ...
+3): 在 .cpp 文件中，构造函数之外声明该变量
+	...
+	#include "globalvaria.h"
+	...
+	// QString GlobalVaria::varia = "init value";
+	...
+	GlobalVaria::GlobalVaria()
+	{
+    	...
+	}
+	注意：声明时，需要满足格式（类名：变量名）
+4): 在需要使用该全局变量的地方先引入 GlobalVaria 的头文件
+	#include "globalvaria.h"
+5): 通过（类名：变量名）的形式进行变量调用
+	qDebug() << "path: " + GlobalVaria::varia;
+
+3、使用 ListView 方法之一
+1): 声明一个 ListView 对象或在 .ui 中放置一个 ListView 部件
+2): 声明一个 QStringList，填充列表所需展示的数据
+	QStringList strList = ...;
+3): 声明一个 QStringListModel，用来将 QStringList 模型化，并赋值给 ListView
+	QStringListModel model = new QStringListModel(this);
+	model->setStringList(strList);
+4): 将 model 赋值给 ListView
+	ui->listView->setModel(model);
+	为 ListView 项设置事件
+	connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(...()));
+
+4、获取路径下所有文件的文件名
+	QStringList MainWindow::getFileNames(QString path)
+	{
+    	QDir dir(path);
+    	QStringList nameFilters;
+    	nameFilters << "*.html";
+    	QStringList files = dir.entryList(nameFilters, QDir::Files|QDir::Readable, QDir::Name);
+    	return files;
+	}

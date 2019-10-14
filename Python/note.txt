@@ -1,10 +1,30 @@
 1、对于list，在同时需要index和value值的时候可以使用 enumerate() 方法进行遍历
 	for i,j in enumerate(<listObject>)
+
 2、os.walk 可以遍历一个路径下的所有文件，参数有 root, file
 	os.listdir(path=".")
 	或 for root, dirs, files in os.walk(rootDir)
+
 3、numpy 的 argmax(<listObject>) 与 argmin(<listObject>) 返回列表中最大最小元素的元素位置 index
+
 4、对于Python的if-else语法简写，实例如下：
 	a = 1
 	a = 10 if a == 1 else 100
 	print(a)	# a = 10
+
+5、对于浮点数的整数化处理：
+	round() 取四舍五入值: round(3.8) => 4，还有带第二个参数的使用方法，略
+	math.floor() 往小取整
+	math.ceil() 往大取整
+
+6、对于异常捕获，万能捕获：
+	try:
+		...
+	except Exception as e:
+		print(e)
+	但这种方式无法得到具体错误详情，利用 traceback：
+	try:
+		...
+	except Exception as e:
+		traceback.print_exc()	# 直接打印错误，此外还能接受 file 参数，写入错误信息到文件
+		traceback.format_exc()	# 返回错误信息字符串
