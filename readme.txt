@@ -40,7 +40,7 @@ can replace the file in work directory with the file in repository version(commi
 if you want to return the change to last add or commit operate:
 	if you haven't "git add <file>", then use 
 		"git checkout -- <file>"
-	if you habe "git add <file>", then use 
+	if you have "git add <file>", then use 
 		"git reset HEAD <file>"
 	after that, use:
 		"git checkout -- <file>"
@@ -55,6 +55,12 @@ if you want to return the change to last add or commit operate:
 	(default is 'master')
 //git clone
 	"git clone git@github.com:JonathanTrj/<reponame>.git"
+	//the branch defaultly has only "master", if you want to work with another remote branch, then
+	"git checkout -b <local_branch_name> <remote_name>/<remote_branch_name>"
+//git clone specific branch
+	"git clone -b <branch_name> <remote_address>"
+//git clone into specific folder
+	"git clone <remote_address> <folder_name>"
 
 //branch
 //pointer HEAD point to 'master', and 'master' point to the current node in a branch
@@ -69,6 +75,10 @@ equals to:
 	
 	"git branch" 
 can show the list of branches, and current branch will be displayed with a (*)
+	"git branch -a"
+can show the list of branches, including all branches in remote
+	"git branch -r"
+can show the list of branches in remote only
 	"git merge <branch_name>" 
 can merge the branch_name branch to the current branch
 	"git branch -d <branch_name>" 

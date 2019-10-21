@@ -28,3 +28,13 @@
 	except Exception as e:
 		traceback.print_exc()	# 直接打印错误，此外还能接受 file 参数，写入错误信息到文件
 		traceback.format_exc()	# 返回错误信息字符串
+
+7、大小写转换
+	小写变大写：“hELLo wOrld"
+	print(a.upper())	>> "HELLO WORLD"
+	大写变小写：”HellnO WORLd“
+	print(a.lower())	>> "hello world"
+	首字母大写：”HELLO World"
+	print(a.capitalize())	>> "Hello world"
+	每个单词首字母大写："hEllo wOrld"
+	print(a.title())	>> "Hello World"

@@ -1,0 +1,10 @@
+1: hexo needs node.js and git
+2: hexo often used command
+	1) hexo init
+	2) hexo g
+	3) hexo s / hexo s -p <port_num>
+	4) hexo d	// the config of repository is in _config.yaml
+	5) hexo clean	// clean the folder "public"
+3: change theme
+	1) git clone into the themes folder
+	2) config "themes" in _config.yaml

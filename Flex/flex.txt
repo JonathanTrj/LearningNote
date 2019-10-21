@@ -1,0 +1,29 @@
+1、任何一个容器都可以指定为flex布局
+.box {
+	display: flex;
+}
+行内元素也可使用flex
+.box {
+	display: inline-flex;
+}
+webkit内核浏览器需要添加-webkit
+.box {
+	display: -webkit-flex;	/* safari */
+	display: flex;
+}
+
+2、设置在容器上的 6 个属性：
+flex-direction: row | row-reverse | column | column-reverse	//子元素排列方向
+flex-wrap: nowrap | wrap | wrap-reverse(向上换行)	//如何换行
+flex-flow: <flex-direction> || <flex-wrap>	//前两者的简写形式
+justify-content: flex-start | flex-end | center | space-between | space-around	//项目在主轴上的对齐方式
+align-items: flex-start | flex-end | center | baseline | stretch	// 项目在交叉轴上的对齐方式
+align-content: flex-start | flex-end | center | space-between | space-around	//多跟轴线的对齐方式
+
+3、设置在项目（子元素）上的 6 个属性：
+order: <integer>	//项目的排列顺序，越小越靠前，默认0
+flex-grow: <number>	//项目的放大比例，默认0
+flex-shrink: <number>	//项目的缩小比例，默认1
+flex-basis: <length> | auto	//项目分配空间前，占据的主轴空间，默认auto
+flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]	//上三者简写形式
+align-self: auto | flex-start | flex-end | center | baseline | stretch	//打破容器束缚，自定义布局形式
