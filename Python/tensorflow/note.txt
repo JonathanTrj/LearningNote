@@ -1,0 +1,1 @@
+1、TensorFlow 是由 Google Brain 团队为深度神经网络（DNN）开发的功能强大的开源软件库，于 2015 年 11 月首次发布，在 Apache 2.x 协议许可下可用。

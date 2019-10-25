@@ -38,3 +38,14 @@
 	print(a.capitalize())	>> "Hello world"
 	每个单词首字母大写："hEllo wOrld"
 	print(a.title())	>> "Hello World"
+
+8、dict_keys转换为list
+	直接使用 list()
+
+9、对于list的元素删除操作：
+	知道内容，不知道索引：l.remove("")
+	知道索引，不知道内容：del l[index]
+
+10、list和str互相转换
+	list2str: "".join(l)
+	str2list: list(s)

@@ -1,0 +1,29 @@
+1、加载数据文件
+read_csv、 read_excel、 read_table、 read_sql
+read_csv参数：encoding、 sep、 header、 names
+
+2、dataframe
+df.info()	// 查看数据集详情
+df.head()	// 查看头部的前n条数据，默认5
+df.tail()	// 查看尾部的后n条数据，默认5
+
+len(df.某字段名.unique())	// 可查看该字段不重复的记录条数，判断数据集中是否存在重复数据
+df_duplicates = df.drop_duplicates(subset=某字段名,keep='first||last')	// 去重，duplicated函数功能相同，但返回的是bool，而非数据集
+
+df.某字段名.apply(方法, axis=0)	// 对每一series应用，axis指定行列
+
+df创建新字段使用"[]"，调用某字段使用"."
+修改列名：df.rename(columns={},inplace=True)
+
+df.describe()	// 数值的描述性统计
+
+df.某字段名.value_counts()	// 非零数值数量统计，分类数据
+
+3、数据分组
+df[df[某字段名].isin(['某属性','某属性'])]	// 数据筛选
+df.groupby('某属性')
+df.groupby(['某属性','某属性',...])
+df.groupby('某属性').count()	// 等同于value_counts()方法
+df.groupby('某属性').mean()	// 求各分组均值
+df.groupby('某属性').mean().unstack()	// 行列转置
+agg	//对分组结果进行按列的处理，与apply方法类似
