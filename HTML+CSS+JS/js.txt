@@ -1,0 +1,15 @@
+1:时间处理
+	var str = "2019/10/1";
+	var d = new Date(str);
+	str.Date()	//日期与时间
+	str.getFullYear();	//年份，推荐使用
+	str.getMonth();	//月份
+	str.getDate();	//一月中的某一天
+	str.getDay();	//一周内的某一天
+	str.getHours();
+	str.getMinutes();
+	str.getSeconds();
+	str.getMilliseconds();
+	str.toString();
+	str.toDateString();
+	str.toTimeString();

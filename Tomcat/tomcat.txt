@@ -1,0 +1,12 @@
+1、配置Web项目
+方法1：
+	在 tomcat 根目录的 webapps 文件夹下，创建项目文件夹，并将项目文件放置其中，在浏览器中通过 localhost:8080/项目文件夹名 即可访问项目。
+方法2：
+	编辑在 tomcat 根目录的 conf 文件夹下的 server.xml 文件，在 HOST 标签中添加:
+		<Context docBase="项目所在文件夹路径" path="url访问名" />
+	在浏览器中通过 localhost:8080/url访问名 即可访问项目。
+方法3：
+	在 tomcat 根目录的 conf -> Catalina -> localhost 文件夹下，创建 xml 文件，命名为希望使用的 url访问名，在文件中添加：
+		<Context docBase="项目所在文件夹路径" />
+	在浏览器中通过 localhost:8080/url访问名 即可访问项目。
+

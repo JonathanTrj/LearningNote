@@ -1,0 +1,11 @@
+1:设置文字断行/隐藏显示方式
+.text {
+	max-width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+2:bootstrap中设置table固定列宽
+.tab {
+	layout: fixed;
+}
