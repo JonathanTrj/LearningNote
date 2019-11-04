@@ -1,7 +1,8 @@
 基础概述
 1：vue-cli 基于 webpack， webpack 基于 node.js
-2：node 是运行在服务器端的 js 文件，可以进行借口开发等，其中的 npm（node packages manage）可以方便的进行前端资源文件/包的管理。
+2：node 是运行在服务器端的 js 文件，可以进行借口开发等，其中的 npm（node packages manage）可以方便的进行资源文件/包的管理。
 3：安装cnpm：npm install -g cnpm --registry=https://registry.npm.taobao.org
+4：npm 安装：npm install ... --save-dev，最后的属性表示将包信息写入packages.json文件中。
 
 脚手架搭建
 1：vue init webpack my-app
@@ -15,3 +16,54 @@
 	...
 	index.html
 	package.json: 依赖配置、启动命令设置等
+3：修改端口、自动打开浏览器等在 config 的 index.js 中设置
+4：在 package.json 中设置有项目启动命令
+	"scripts": {
+	    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+	    "start": "npm run dev",
+	    "unit": "jest --config test/unit/jest.conf.js --coverage",
+	    "e2e": "node test/e2e/runner.js",
+	    "test": "npm run unit && npm run e2e",
+	    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
+	    "build": "node build/build.js"
+	  },
+	  可以根据 npm run dev 启动项目
+
+添加界面
+1：创建组件Compopnent，以大驼峰方式命名
+2：按照摸版的组件内容格式，进行组件代码编写
+3：在 App.vue 中引入组件：
+	1）在 script 中引入
+		import Banner from "./components/Banner"
+	2）在 export 中添加组件
+		components: {Banner}
+	3) 在 template 中通过 html 标签的形式引入与使用组件
+		<Banner />
+
+界面路由
+1：将页面编写为各种组件
+2：在点击的地方添加 <router-link to="">...</router-link>
+3：在展示新内容的地方添加 <router-view />
+4：在 router/index.js 中添加路由信息
+
+组件传参
+1：在展示组件的标签中添加 :属性名="变量名"，如 <Banner :imgs="img" />
+2：在组件中接收参数：在 script 中添加属性：props: ['imgs']
+
+前后端数据交互
+方法一：
+	使用axios进行数据请求
+方法二：基于界面路由、url拼接
+	1：在 router/index.js 中加入路由，path: '/.../:id'
+	2：在 <router-link> 中进行url拼接，因为动态，所以属性使用 :to，而不是 to
+
+样式资源引入
+1：在 style 标签中
+	@import ''
+2：在 main.js 中
+	import ''
+3：若需要引入全局样式，则在 main.js 中引入，否则在具体的组件中引入
+
+点击某点触发样式改变
+需要在router中配置linkactiveclass
+
