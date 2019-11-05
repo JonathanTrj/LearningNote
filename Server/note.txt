@@ -1,0 +1,64 @@
+在服务器中运行python脚本
+1：使用ssh（windows使用putty，mac使用终端）链接服务器
+2：确定python版本
+	更新/安装新python（在centos中：）
+	1）which python 查看python路径
+	2）进入对应路径，使用 ls python* 或 ls -al python* 查看python配置
+	3）安装相关包：yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make
+	4）下载python源码包：wget https://www.python.org/ftp/python/3.6.8/Python-3.6.8.tar.xz
+	5）解压到指定目录：tar xf Python-3.6.4.tar.xz -C /usr/local/python3/，若报错文件不存在，则可能yum没有xz支持，使用：yum install -y xz
+	6）进入解压路径，进行python安装：./configure --prefix=/usr/local/python3/python3 --with-ssl，此处的地址为python源码包解压地址（稍后的安装地址）
+	7）编译文件：make && make install
+	8）验证安装：/usr/local/python3/python3/bin/pip3 list
+	至此，完成python安装
+	1）建立软连接：ln -s /usr/local/python3/python3/bin/python3 /usr/bin/python
+		#ps：如果提示 ln: creating symbolic link `/usr/bin/python': File exists
+		#需要把原来的/usr/bin/python 通过以下命令备份一下
+ 		mv /usr/bin/python /usr/bin/python.bak
+		#需要恢复原来的python指向的话：
+		cp /usr/bin/python.bak /usr/bin/python
+	2）验证安装：python -V
+	若需要重装python与yum环境：
+	1）删除python
+		1、rpm -qa|grep python|xargs rpm -ev --allmatches --nodeps ##强制删除已安装程序及其关联
+		2、whereis python |xargs rm -frv ##删除所有残余文件 ##xargs，允许你对输出执行其他某些命令
+		3、whereis python ##验证删除，返回无结果
+	2）删除yum
+		1、rpm -qa|grep yum|xargs rpm -ev --allmatches --nodeps
+		2、whereis yum |xargs rm -frv
+		3、whereis yum
+	3）创建两个文件夹存放python与yum安装包
+	4）前往http://vault.centos.org/7.4.1708/os/x86_64/Packages/，通过wget下载对应包，注意centos版本对应
+		python包：
+			python-...x86_64.rpm
+			python-iniparse-....noarch.rpm
+			python-pycurl-....x86_64.rpm
+			python-devel-...x86_64.rpm
+			python-libs-...x86_64.rpm
+			python-urlgrabber-...narch.rpm
+			rpm-python-...x86_64.rpm
+		yum包：
+			yum-...noarch.rpm
+			yum-metadata-parser-...x86_64.rpm
+			yum-plugin-fastestmirror-...noarch.rpm
+	5）开始安装python：rpm -ivh python-* rpm-python-*，若出现依赖错误，使用：rpm -ivh python-* rpm-python-* --nodeps --force
+	6）开始安装yum：rpm -ivh yum-*
+3：创建虚拟环境
+	1）pip install virtualenv, pip install virtualenvwrapper
+	2）配置环境变量
+		1、vim ~/.bashrc
+		2、添加：
+			export WORK_HOME=$HOME/.virtualenvs
+			source /usr/local/python3/python3/bin/virtualenvwrapper.sh
+		3、source ~/.bashrc
+	3）创建虚拟环境：mkvirtualenv env_name
+	4）启动环境：workon env_name
+	5）退出环境：deactivate
+	6）删除环境：rmvirtualenv env_name
+4：上传脚本
+	1）使用FileZilla通过FTP进行脚本上传
+5：在后台运行python脚本
+	1）nohup python ....py
+	2）查看进程：ps -ef | grep python
+	3）指定日志输出文件：nohup python -u ....py > ....log 2>&1 &
+	4）终止进程：kill PID（PID通过2获得）
