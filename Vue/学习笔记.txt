@@ -47,8 +47,12 @@
 4：在 router/index.js 中添加路由信息
 
 组件传参
-1：在展示组件的标签中添加 :属性名="变量名"，如 <Banner :imgs="img" />
-2：在组件中接收参数：在 script 中添加属性：props: ['imgs']
+1：父到子的传参
+	1：在展示组件的标签中添加 :属性名="变量名"，如 <Banner :imgs="img" />
+	2：在组件中接收参数：在 script 中添加属性：props: ['imgs']
+2：子到父的传参
+3：兄弟组件传参
+4：无关系传参
 
 前后端数据交互
 方法一：
@@ -67,3 +71,36 @@
 点击某点触发样式改变
 需要在router中配置linkactiveclass
 
+在vue中使用element-ui
+1：在main.js中添加：
+	import elementUI from 'element-ui'
+	import 'element-ui/lib/theme-chalk/index.css'
+	Vue.use(elementUI)
+
+filter过滤器
+1、用于将文本格式化处理
+2、使用方法：
+	1）在 script 中定义 filters（与data同级）
+	2）在 filters 中定义：
+		name: function (data) {
+			return ...
+		}
+	3）在使用时：{{ value | filter_name }}
+3、若需要传递参数给过滤器：
+	1）filters 中：
+		name: function (data, param) {
+			return ...
+		}
+	2）在使用时：{{ value | filter_name(param) }}
+
+计算属性 computed
+1、用于封装复杂计算过程
+2、使用方法：
+	1）在 script 中添加计算属性，与data同级
+	2）在 computed 中：
+		name: function () {
+			...
+			return ...
+		}
+	3）使用时：{{ computed_name }}
+3、对于搜索功能，使用v-model进行变量绑定后，可以通过计算属性进行结果集合过滤，页面遍历过滤结果进行展示

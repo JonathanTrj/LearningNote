@@ -1,0 +1,18 @@
+搭建Django+Vue
+1、建立Django项目
+2、建立新app：python manage.py startapp app_name
+3、在根目录搭建vue脚手架：vue init webpack project_name
+4、进行前端开发
+5、打包前端文件：npm run build，打包文件存储在dist文件夹中
+4、修改django项目的setting.py：
+	修改templates配置：'DIRS': ['project_name/dist']
+	添加配置：
+		# Add for vue.js
+		STATICFILES_DIRS = [
+		    os.path.join(BASE_DIR, "frontend/dist/static"),
+		]
+5、编辑urls.py：
+	添加：
+		from django.views.generic.base import TemplateView
+		path(r'', TemplateView.as_view(template_name="index.html"))
+6、运行django项目：python manage.py runserver
