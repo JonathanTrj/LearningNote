@@ -18,7 +18,7 @@
 			#需要恢复原来的python指向的话：
 			cp /usr/bin/python.bak /usr/bin/python
 		2）验证安装：python -V
-		若遇到yum报错问题，原因是原yum默认使用的python版本，故需要修改：
+	若遇到yum报错问题，原因是原yum默认使用的python版本，故需要修改：
 		1）vi /usr/bin/yum
 		2）将第一行的python环境指向正确的python2环境即可
 	若需要重装python与yum环境：

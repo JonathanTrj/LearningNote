@@ -1,0 +1,302 @@
+1、创建django项目
+2、配置settings.py
+	1）若希望将多个app放置在同一个文件夹下：
+		1：创建文件夹，将app代码拖放其中，取消勾选references
+		2：文件夹右键，选择make directory as -> sources root
+		3：在settings.py中添加路径配置：sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+	2）在项目部署到服务器时，需要配置：ALLOWED_HOSTS = 【“*”】
+	3）静态文件路径，需要在setting.py中添加：
+		STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+3、编写views.py
+	1）使用session
+		1：django默认自带session实现，实现方式有数据库、cache等
+		2：使用数据库实现：执行 python manage.py migrate
+		3：在 views.py 中通过 request.session[''] = .. 设置session，通过 request.session.get('') 获得session
+	2）文件下载（StreamingHttpResponse）
+		1：定义方法，实现文件的流读取
+			def file_iterator(file, chunk_size=1024):
+			    with open(file, 'rb') as f:
+			        while True:
+			            c = f.read(chunk_size)
+			            if c:
+			                yield c
+			            else:
+			                break
+		2：定义response：
+			response = StreamingHttpResponse(file_iterator(文件路径))
+			response['Content-Type'] = 'application/octet-stream'
+			response['Content-Disposition'] = 'attachment;filename="{0}"'.format(file_name)
+			return response
+4、配置urls.py
+	1）设置path时，开头无需'/'，
+	2）在templates中进行url调用时，若开头带有'/'，则完全匹配urls.py中定义的path，否则，将以当前页面的url为开头，拼凑后续url，再与urls.py中的path进行匹配。
+	3）若希望直接返回一个template，而不经过views：
+		from django.views.generic import TemplateView
+		...
+		path('', TemplateView.as_view(template_name="index.html")),
+5、编写templates
+	1）使用 {% include ‘’ %} 引入摸版，使用 {% extend '' %} 继承摸版
+	2）使用 src="/static/..."进行静态资源引用
+	3）$(document).height() 与 $(document.body).height() 规范网页尺寸
+	4）jquery使用 css、attr直接操作标签的属性与样式
+6、前端传递图片数据
+	1）定义：
+		var MIME_TYPE = 'image/png';
+	2）在前端捕获canvas，对该对象调用 toDataURL 方法：
+		var imgURL = <canvas_obj>.toDataURL(MIME_TYPE);
+	3）传递给后台，后台在接收到后，原始数据的开头存在“image”等信息，需要筛选剔除
+		value = value.aplit(",")[1]
+	4）引入 base64 包，进行数据解码
+		base64.b64decode(value)
+	5）以’wb‘的形式写入文件，即可完成图片的服务器保存
+7、JSON数据传递
+	1）前端
+		JSON.stringify(...);	// 编码，传递给后台
+		JSON.parse(...);	//解码，接收后台数据
+	2）后台
+		json.dumps(...)	// 编码，传递给前端
+		json.loads(...)	// 解码，接收前端数据
+8、定时任务（apscheduler）
+	1）pip install apscheduler
+	2）pip install django-apscheduler
+	3）在 settings.py 中的 INSTALLED_APP 添加：’django_apscheduler',
+	4）在 views.py 中编写：
+		from apscheduler.schedulers.background import BackgroundScheduler
+		from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
+
+		#开启定时工作
+		try:
+		    # 实例化调度器
+		    scheduler = BackgroundScheduler()
+		    # 调度器使用DjangoJobStore()
+		    scheduler.add_jobstore(DjangoJobStore(), "default")
+		    # 设置定时任务，选择方式为interval，时间间隔为10s
+		    # 另一种方式为每天固定时间执行任务，对应代码为：
+		    # @register_job(scheduler, 'cron', day_of_week='mon-fri', hour='9', minute='30', second='10',id='task_time')
+		    @register_job(scheduler,"interval", hours=8)
+		    def my_job():
+		        # 这里写你要执行的任务
+		        。。。
+		    register_events(scheduler)
+		    scheduler.start()
+		except Exception as e:
+		    print(e)
+		    # 有错误就停止定时器
+		    scheduler.shutdown()
+9、文件上传（fileinput）
+	1）前端
+		1：引入必要静态资源
+			<link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    		<link href="/static/css/file-input.min.css" media="all" rel="stylesheet" type="text/css" />
+		    <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.css" rel="stylesheet"/>
+			<link href="/static/themes/explorer-fas/theme.css" media="all" rel="stylesheet" type="text/css"/>
+		    <script src="/static/js/jquery.min.js"></script>
+			<script src="/static/js/file-input.min.js"></script>
+		    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+			<script src="/static/themes/fas/theme.js" type="text/javascript"></script>
+		    <script src="/static/themes/explorer-fas/theme.js" type="text/javascript"></script>
+		    <script src="/static/locale/zh.js" type="text/javascript"></script>
+		2：添加tag标签：
+			<input id="inputid" type="file" name="uploadfiles[]" class="file-loading" multiple>
+		3：进行input配置：
+			$("#inputid").fileinput(
+	            {
+	                language: 'zh',
+	                theme: 'fas',
+	                showUpload: true,
+	                browseOnZoneClick: true,
+	                maxFileCount: 0,
+	                allowedFileExtensions:['txt','csv'],
+	                uploadUrl:'/antenna/file_upload/',
+	                uploadAsync: true,
+	                uploadExtraData: function () {  // uploadExtraData携带附加参数，上传时携带csrftoken
+	                    return {doc_uuid: $('[name=doc_uuid]').val()};
+	                },
+	                initialPreview: [],　　// 默认预览设置，回显时会用到
+	                initialPreviewConfig: [],　　// 默认预览的详细配置，回显时会用到
+
+	                allowedPreviewTypes:['text'],
+	                layoutTemplates: {
+	                    actionUpload: '',
+	                    actionZoom: ''
+	                },
+	                preferIconicPreview: true, // 开启用图标替换预览效果
+	                preferIconicZoomPreview: true,
+	                previewFileIconSettings: { // configure your icon file extensions
+	                    'doc': '<i class="fas fa-file-word"></i>',
+	                    'xls': '<i class="fas fa-file-excel"></i>',
+	                    'ppt': '<i class="fas fa-file-powerpoint"></i>',
+	                    'pdf': '<i class="fas fa-file-pdf"></i>',
+	                    'zip': '<i class="fas fa-file-archive"></i>',
+	                    'code': '<i class="fas fa-file-code"></i>',
+	                    'mov': '<i class="fas fa-file-video"></i>',
+	                    'mp3': '<i class="fas fa-file-audio"></i>',
+	                    'img': '<i class="fas fa-file-image"></i>',
+	                },
+	                previewFileExtSettings: {
+	                    'doc': function(ext) {
+	                        return ext.match(/(doc|docx)$/i);
+	                    },
+	                    'xls': function(ext) {
+	                        return ext.match(/(txt|ini|csv|xls|xlsx)$/i);
+	                    },
+	                    'ppt': function(ext) {
+	                        return ext.match(/(ppt|pptx)$/i);
+	                    },
+	                    'zip': function(ext) {
+	                        return ext.match(/(zip|rar|tar|gzip|gz|7z)$/i);
+	                    },
+	                    'mov': function(ext) {
+	                        return ext.match(/(avi|mpg|mkv|mov|mp4|3gp|webm|wmv)$/i);
+	                    },
+	                    'mp3': function(ext) {
+	                        return ext.match(/(mp3|wav)$/i);
+	                    },
+	                    'code': function(ext) {
+	                        return ext.match(/(java|php|js|css|htm|html|py|cpp|h|spyc)$/i);
+	                    },
+	                    'img': function(ext) {
+	                        return ext.match(/(jpg|png)$/i);
+	                    }
+	                }
+	            }
+	        ).on('fileuploaderror', function(event, data, msg) {
+				{# var form = data.form;#}
+				{# var files = data.files;#}
+				{# var extra = data.extra;#}
+				{# var response = data.response;#}
+				{# var reader = data.reader;#}
+				{# console.log(files);#}
+				{# // 获取信息#}
+				{# alert(msg);#}
+	        }).on("fileloaded", function (e, file, previewId) {
+	            // aryFile.length = 0;
+	            // 加载预览后触发的事件，将所有文件名添加到全局变量 aryFiles 数组中
+	            aryFiles.push(file.name);
+	        }).on("fileuploaded", function (e,data,previewId,index) {
+	            // 上传成功后触发的事件
+	        }).on('filebatchuploadcomplete', function(event, files, extra) {
+	            $("#exampleModalCenter").modal('show');
+	            var datadeal = $.ajax({
+	                url: '/antenna/file_process/',
+	                success: function (data) {
+	                    if (data === "ok") {
+	                        $("#exampleModalCenter").removeClass('show');
+	                        $(".modal-backdrop").removeClass("show");
+	                        $("#info").modal('show');
+	                        setTimeout(function () {
+	                            window.location.href = "/antenna/show_result/";
+	                        },3000);
+	                    } else {
+	                        $("#exampleModalCenter").removeClass('show');
+	                        $(".modal-backdrop").removeClass("show");
+	                        $("#warning-body").html('<strong>数据处理出错！请重新选择文件并上传</strong>');
+	                        $("#warning").modal('show');
+	                    }
+	                },
+	                error: function () {
+	                    $("#exampleModalCenter").removeClass('show');
+	                    $(".modal-backdrop").removeClass("show");
+	                    $("#warning-body").html('<strong>网络请求出错！请重新选择文件并上传</strong>');
+	                    $("#warning").modal('show');
+	                }
+	            });
+	        });
+	2）后台
+		1：接收上传文件
+			# 接收文件与额外传递的数据
+			att_file = request.FILES.get('uploadfiles[]', None)
+		    doc_uuid = request.POST.get('doc_uuid', None)
+
+		    if att_file:
+		    	# 文件名处理
+		        name = att_file.name
+		        name_s = name.split("_")
+		        name = name_s[0]+"("+name_s[1]+")_"+name_s[3]+"_"+name_s[4]+"("+name_s[5]+")"+name_s[6]
+		        # 保存文件到硬盘中
+		        file_dir = os.path.join(request.session.get('data_dir'), name)
+		        print(file_dir)
+		        if os.path.exists(file_dir):
+		            os.remove(file_dir)
+		        f = open(file_dir, 'wb')
+		        for i in att_file.chunks():
+		            f.write(i)
+		        f.close()
+		        # 下载和预览的url
+		        url = settings.MEDIA_URL + att_file.name
+		        file_type = re.search(r'[^.]+\w$', att_file.name).group()# 提前文件后缀名
+
+		        # 文件类型，可自行增删
+		        img_list = ['jpg', 'jpeg', 'jpe', 'gif', 'png', 'pns', 'bmp', 'png', 'tif']
+		        pdf_list = ['pdf']
+		        text_list = ['txt', 'md', 'csv', 'nfo', 'ini', 'json', 'php', 'js', 'css']
+
+		        # bootstrap fileinput 上传文件的回显参数，initialPreview（列表），initialPreviewConfig（列表）
+		        initialPreview = []
+		        # 根据上传的文件类型，生成不同的HTML，
+		        if file_type in img_list:
+		            initialPreview.append(
+		                "<img src='" + url + "' class='file-preview-image' style='max-width:100%;max-height:100%;'>")
+		        elif file_type in pdf_list:
+		            initialPreview.append(
+		                "<div class='file-preview-frame'><div class='kv-file-content'><embed class='kv-preview-data file-preview-pdf' src='" + url +
+		                "' type='application/pdf' style='width:100%;height:160px;'></div></div>")
+		        elif file_type in text_list:
+		            initialPreview.append(
+		                "<div class='file-preview-frame'><div class='kv-file-content'><textarea class='kv-preview-data file-preview-text' title='" + att_file.name +
+		                "' readonly style='width:213px;height:160px;'></textarea></div></div>")
+		        else:
+		            initialPreview.append(
+		                "<div class='file-preview-other'><span class='file-other-icon'><i class='glyphicon glyphicon-file'></i></span></div>")
+
+		        initialPreviewConfig = [{
+		            'caption': att_file.name,# 文件标题
+		            'type': file_type,# 文件类型
+		            'downloadUrl': url,# 下载地址
+		            'url': '/antenna/file_delete/',# 预览中的删除按钮的url
+		            'size': os.path.getsize(file_dir),# 文件大小
+		            'extra': {'doc_uuid': doc_uuid},# 删除文件携带的参数
+		            'key': name,# 删除时ajax携带的参数
+		        }]
+		        # 返回json数据，initialPreview initialPreviewConfig 会替换初始化插件时的这两个参数 append:True 将内容添加到初始化预览
+		        return HttpResponse(
+		            json.dumps({'initialPreview': initialPreview, 'initialPreviewConfig': initialPreviewConfig, 'append': True}))
+		    else:
+		        return HttpResponse(json.dumps({'status': False}))
+10、多文件压缩（ZipUtilities）
+	1）pip install zipstream
+	2）编写 use_of_ziputility.py
+		import os
+		import zipstream
+		class ZipUtilities:
+		    zip_file = None
+
+		    def __init__(self):
+		        self.zip_file = zipstream.ZipFile(mode='w', compression=zipstream.ZIP_DEFLATED)
+
+		    def toZip(self, file, name):
+		        if os.path.isfile(file):
+		            self.zip_file.write(file, arcname=os.path.basename(file))
+		        else:
+		            self.addFolderToZip(file, name)
+
+		    def addFolderToZip(self, folder, name):
+		        for file in os.listdir(folder):
+		            full_path = os.path.join(folder, file)
+		            if os.path.isfile(full_path):
+		                self.zip_file.write(full_path, arcname=os.path.join(name, os.path.basename(full_path)))
+		            elif os.path.isdir(full_path):
+		                self.addFolderToZip(full_path, os.path.join(name, os.path.basename(full_path)))
+
+		    def close(self):
+		        if self.zip_file:
+		            self.zip_file.close()
+	3）在 views 中引入，实例化：
+		utilities = ZipUtilities()
+	4）将需要压缩的文件遍历、调用 utilities 的 toZip() 方法
+		utilities.toZip(文件路径， 文件名)
+	5）提供zip下载：定义 response：
+		response = StreamingHttpResponse(utilities.zip_file)
+		response['Content-Type'] = 'application/zip'
+		response['Content-Disposition'] = 'attachment;filename="{0}"'.format(压缩包名称)
+		return response

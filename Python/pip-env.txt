@@ -1,0 +1,4 @@
+1、pip freeze > requirements.txt
+2、pip download -d <path> -r requirements.txt
+3、拷贝requirements.txt和所有包
+4、pip install --no-index --find-links=<path> -r requirements.txt
