@@ -5,7 +5,78 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
 2:bootstrap中设置table固定列宽
 .tab {
 	layout: fixed;
 }
+
+3:html5新增属性
+结构性元素
+    header、footer、aside、nav、article、section
+语义性元素
+    mark、progress、time、details、datalist、ruby、menu、command
+    mark：突出显示
+    progress：进度条
+    time：显示时间
+    details：相当于bootstrap的collaspse
+    datalist：下拉列表
+    ruby：注释
+    menu、command目前浏览器不支持
+废除
+    只支持iframe框架
+表单新增
+	输入类型<input type="" />
+		email、url、number、range、Date Pickers、search、tel、color
+	input属性
+		autocomplete（on、off）、autofocus、form、重写属性、heitht与width属性、list、min与max与step、multiple、pattern、placeholder、required
+		重写属性：formaction、formenctype、formmethod、formnovalidate、formtarget
+		height与width：只针对type=image
+绘图：
+	canvas：canvas实际上只是一个容器，通过js在其上进行图形绘制
+	获取canvas对象、调用getContext('2d')方法、开始绘制
+
+4：CSS3新增
+属性选择器：
+	Element[att^="val"]，属性att的值以val开头的元素Element
+	Element[att$="val"]，属性att的值以val结尾的元素Element
+	Element[att*="val"]，属性att的值包含val的元素Element
+结构伪累选择器：
+	:root——文档根元素
+	E:nth-child(n)
+	E:nth-last-child(n)
+	E:nth-of-type(n)
+	E:nth-last-of-type(n)
+	E:last-child
+	E:first-of-type
+	E:last-of-type
+	E:only-child
+	E:only-of-type
+	E:empty——不报汉子元素的E
+UI伪累选择器
+	E:enabled E:disabled
+	E:checked——暂不支持
+	E:read-write E:read-only
+	E:selection
+	E:out-of-range E:in-range
+	E:optional
+	E:required
+	E:valid E:invalid
+其他选择器
+	E~F：匹配的F元素，且位于匹配元素E后面
+	E:not(s)：二次筛选
+	E:target
+边框设置
+	border-radius：添加圆角边框
+	border-image：边框北京
+背景设置
+	background-origin
+	background-clip
+	background-size
+动画
+	animation
+	transform
+数据存储
+	localsortage
+	sessionstorage
+	web sql（safari、chrome、opera）

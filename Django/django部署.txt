@@ -9,3 +9,10 @@ Python+Django+Nginx+Uwsgi（史上最全步骤）
 
 https://blog.csdn.net/qianbin3200896/article/details/81166066
 基于Windows平台的Django本地部署和腾讯云服务器上部署（1）
+
+成功：
+https://www.cnblogs.com/happyAzhan/p/11304696.html
+Windows的　IIS　部署django项目
+
+https://www.jianshu.com/p/0febd3cfc025
+Django在windows下用Apache 部署

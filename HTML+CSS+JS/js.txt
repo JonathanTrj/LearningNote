@@ -17,3 +17,12 @@
 2:json
     1: JSON.parse(后台传过来的数据)：把JSON字符串转换成js数据，如存在不符合JSON要求的数据，会直接报错；
     2: JSON.stringigy(要往后台传数据 )：把js的数据转换成JSON字符串，如存在不符合JSON要求的数据，会直接报错
+
+3:function
+	1) function name(args) {
+		...
+	}
+	2) var f = function (args) {
+		... 
+	}
+	1会在文档初始化时加载，2仅仅在执行到所在行时被加载
