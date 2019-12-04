@@ -1,0 +1,40 @@
+1:build a vue project to electron
+	package:(可执行文件)
+		win:exe
+		mac:.app
+		steps:
+			1: npm install electron-packager -D
+			2: config package.json->scripts: "pack":"electron-packager ./ <app name> --platform=win32 --out=./dist --arch=x64 --app-version=1.0.1 --ignore=node_modules --icon=.. --overwrite
+			format: (electron-packager <app dir> <app name> <platform> --out=<out dir> <struct> <vertion> <ignore> <icon> --overwrite)
+			3: npm run pack
+	builder:(可执行文件和安装包)
+		win:exe
+		mac:dmg/exe
+		steps:
+			1: npm install electron-builder -g
+			2: config package.json, add "build": {
+				"appId":"...",
+				"directories":{
+					"app":"./"
+				},
+				"productName":"...",
+				"dmg":{
+					"icon":"...",
+					"window":{
+						"x":200,
+						"y":150,
+						"width":...,
+						"height":...,
+						...
+					}
+				},
+				"mac":{
+					"icon":"....icns"
+				},
+				"win":{
+					'icon':"....ico"
+				}
+			}
+			3: config package.json->scripts: 
+			"buildMac":"electron-builder --platform=mac --arch=x64",
+			"buildwin":"electron-builder --platform=win --arch=x64"

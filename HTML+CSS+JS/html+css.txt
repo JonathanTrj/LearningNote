@@ -70,13 +70,112 @@ UI伪累选择器
 	border-radius：添加圆角边框
 	border-image：边框北京
 背景设置
-	background-origin
-	background-clip
+	background-origin:"border-box|padding-box|content-box" 起始区域
+	background-clip:"border-box|padding-box|content-box" 向外裁剪区域
 	background-size
 动画
-	animation
-	transform
+	transitions
+	animations
+	transform (css attribute)
 数据存储
 	localsortage
 	sessionstorage
 	web sql（safari、chrome、opera）
+
+5: canvas
+	1: <canvas id="..." width="..." height="...">replace innerHTML</canvas>
+	2: getElementById("...");
+	3: getContext("2d");
+	4: paint
+		1、直线
+			context.beginPath();
+			context.moveTo(0,0);
+			context.lineTo(100,100);
+			context.lineWidth = 20;
+			context.strokeStyle = "#ff0000";
+			context.lineCap = "round";
+			context.stroke();
+		2、弧线和曲线
+			context.beginPath();
+			context.moveTo(0,0);
+			context.lineTo(100,100);
+			context.arcTo(弧度起始点，终点，半径); //一共五个参数
+			context.lineTo(...);
+			context.stroke();
+		3、贝塞尔曲线
+		4、矩形rect()，圆形arc()，
+		5、样式
+			线条宽度lineWidth, 线条颜色strokeStyle, 端点样式lineCap, 交点样式lineJoin, 颜色填充fillStyle, fill()
+			阴影shadowColor,shadowBlur,shadowOffsetX,shadowOffsetY，透明度globalAlpha
+			线性渐变createLinearGradient(...).addColor(...)/addColorStop()
+			径向渐变createRadialGradient(...).addColor(...)/addColorStop()
+			图案填充createPattern(image, type)
+	5：总结
+		每次都要beginPath，结束时stroke
+	6、画图像
+		context.drawImage(imageObj, x, y);
+		context.drawImage(imageObj, x, y, width, height);
+		切割：context.drawImage(imageObj, sx, sy, sw, sh, dx, dy, dw, dh);
+	7、绘制文本
+		context.fillText(Text, x1, y1);
+		context.strokeText()
+	8、图形变换
+		移动坐标空间：translate()
+		旋转坐标空间：rotate()
+		缩放图形：scale()
+	9、图形组合与裁切
+
+6: media
+	<audio></audio>
+	<video></video>
+	canPlayType()
+	load()
+	pause()
+	play()
+
+7、动画
+	1:transform：2D变换
+		css属性：transform: none|<transform-functions>;
+		transform-functions:
+			translate()
+			scale(),scaleX(),scaleY()
+			rotate()
+			skew(),skewX(),skewY()
+		css属性:transform-origin: x-axis y-axis z-axis; //更改中心点
+	2:transitions过度动画
+		所有属性：
+			transition: ... //可同时指定一下四个属性
+			transition-property: none|all|property //指定使用动画的css属性
+			transition-duration: time //动画持续时间
+			transition-timing-function: linear|ease|ease-in|ease—out|ease-in-out|cubic-bezier(n,n,n,n); //持续时间函数
+			transition-delay: time //动画延迟时间
+	3：animations复杂动画
+		@keyframes规则
+		example：在chrome/safari中需要加上 -webkit-
+			@-webkit-keyframes animation-name {
+				0% {
+					background-position: 0,0;
+				}
+				14.3% {
+					background-position: -180px, 0;
+				}
+				...
+				100% {
+					background-position: -1090px, 0;
+				}
+			}
+			使用方法：定义如上css动画规则，在具体需要应用动画的标签对应属性内设置如下属性值
+		animations动画属性(safari/chrome需要添加-webkit-)
+			animation-name: keyframesname|none
+			animation-duration: time
+			animation-timing-function: same as transitions
+			animation-delay: time(s/ms)
+			animation-iteration-count: n|infinite
+			animation-direction: normal|reverse|alternate|alternate-reverse|initial
+			animation-play-state: paused|running
+			animation: 所有以上属性
+	4: css3渐变，放在 background 属性中
+		1、线性渐变
+			linear-gradient(方向或角度，起始颜色，终点颜色)
+		2、径向渐变
+			radial-gradient(。。。，方向和大小，包含或覆盖)
