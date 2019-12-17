@@ -1,0 +1,134 @@
+1、centos7安装nginx
+	1、yum安装
+		1：yum -y install nginx	#安装nginx
+		2：yum remove nginx	#卸载nginx
+		3：使用nginx
+			1、systemctl enable nginx	#开机自启动
+			2、service nginx start	#启动nginx
+			3、service nginx stop	#停止nginx
+			4、service nginx restart	#重启nginx
+			5、service nginx reload	#刷新配置，重启nginx
+	2、源码包安装
+		1、安装依赖
+			1. 安装 gcc 环境
+				$ sudo yum -y install gcc gcc-c++ # nginx 编译时依赖 gcc 环境
+			2. 安装 pcre
+				$ sudo yum -y install pcre pcre-devel # 让 nginx 支持重写功能
+			3. 安装 zlib
+				# zlib 库提供了很多压缩和解压缩的方式，nginx 使用 zlib 对 http 包内容进行 gzip 压缩
+				$ sudo yum -y install zlib zlib-devel 
+			4. 安装 openssl
+				# 安全套接字层密码库，用于通信加密
+				$ sudo yum -y install openssl openssl-devel
+		2、安装nginx
+			1、前往 https://nginx.org/en/download.html 下载源码包
+			2、前往 /usr/local/nginx
+			3、wget 获取源码包
+			4、tar -zxvf 解压缩
+			5、进入解压目录进行配置、编译与安装
+				./configure --prefix=/usr/local/nginx --with-http_ssl_module	#检查平台环境，使用OpenSSL
+				make && make install	#编译与安装
+			6、使用nginx
+				启动：/usr/local/nginx/sbin/nginx
+				重新加载：/usr/local/nginx/sbin/nginx -s reload
+				停止服务：/usr/local/nginx/sbin/nginx -s stop
+				查看服务进程：ps -ef | grep nginx
+
+2、nginx配置文件
+	1、主要分为六个区域
+		1、main      (全局设置)
+		2、events    (nginx工作模式)
+		3、http      (http设置)
+		4、sever     (主机设置)
+		5、location  (URL匹配)
+		6、upstream  (负载均衡服务器设置)
+	2。1：main 全局设置
+		user nobody nobody;
+		worker_processes 2;
+		error_log /usr/local/var/log/nginx/error.log notice
+		pid /usr/local/var/run/nginx/nginx.pid;
+		worker_rlimit_nofile 1024;
+
+		user 来指定 Nginx Worker 进程运行用户以及用户组，默认由 nobody 账号运行。
+
+		worker_processes 来指定了 Nginx 要开启的子进程数。每个 Nginx 进程平均耗费 10M~12M 内存。根据经验，一般指定 1 个进程就足够了，如果是多核 CPU，建议指定和 CPU 的数量一样的进程数即可。我这里写 2，那么就会开启 2 个子进程，总共 3 个进程。
+
+		error_log 用来定义全局错误日志文件。日志输出级别有 debug、info、notice、warn、error、crit 可供选择，其中，debug 输出日志最为最详细，而 crit 输出日志最少。
+
+		pid 用来指定进程id的存储文件位置。
+
+		worker_rlimit_nofile 用于指定一个 nginx 进程可以打开的最多文件描述符数目，这里是 65535，需要使用命令 “ulimit -n 65535” 来设置。
+	2.2：events 工作模式控制
+		events {
+		    use kqueue; # mac 平台，指定 Nginx 的工作模式
+		    worker_connections 1024; # 定义 Nginx 每个进程的最大连接数，即接收前端的最大请求数，默认是 1024
+		}
+		use 用来指定 Nginx 的工作模式。Nginx 支持的工作模式有 select、poll、kqueue、epoll、rtsig 和 /dev/poll。其中 select 和 poll 都是标准的工作模式，kqueue 和 epoll 是高效的工作模式，不同的是 epoll 用在 Linux 平台上，而 kqueue 用在 BSD 系统中，因为 Mac 基于 BSD ,所以 Mac 也得用这个模式，对于 Linux 系统，epoll 工作模式是首选。
+
+		worker_connections 用于定义Nginx每个进程的最大连接数，即接收前端的最大请求数，默认是1024。最大客户端连接数由worker_processes 和 worker_connections 决定，即 Max_clients = worker_processes * worker_connections，在作为反向代理时，Max_clients 变为：Max_clients = worker_processes * worker_connections/4。 
+		进程的最大连接数受 Linux 系统进程的最大打开文件数限制，在执行操作系统命令 “ulimit -n 65536” 后 worker_connections 的设置才能生效。
+	2.3：http 核心
+		include 用来设定文件的 mime 类型,类型在配置文件目录下的 mime.type 文件定义，来告诉 nginx 来识别文件类型。
+
+		default_type 设定了默认的类型为二进制流，也就是当文件类型未定义时使用这种方式，例如在没有配置 asp 的 locate 环境时，Nginx 是不予解析的，此时，用浏览器访问 asp 文件就会出现下载了。
+
+		log_format 用于设置日志的格式（格式设置可参照 Nginx日志格式设置https://my.oschina.net/u/3314358/blog/1828545），和记录哪些参数，这里设置为 main，刚好用于 access_log 来记录这种类型。
+
+		main 的类型日志如下：也可以增删部分参数。
+
+			127.0.0.1 - - [21/Apr/2015:18:09:54 +0800] "GET /index.php HTTP/1.1" 200 87151 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.76 Safari/537.36"
+
+		access_log 用来记录每次的访问日志的文件地址，后面的 main 是日志的格式样式，对应于 log_format 的 main。
+
+		sendfile 参数用于开启高效文件传输模式。将 tcp_nopush 和 tcp_nodelay 两个指令设置为 on 用于防止网络阻塞。
+
+		keepalive_timeout 设置客户端连接保持活动的超时时间。在超过这个时间之后，服务器会关闭该连接。
+	2.3.1：server http子模块
+		listen       8080;     # 指定虚拟主机的服务端口
+        server_name  localhost 192.168.12.10 www.yangyi.com;  # 指定IP地址或者域名，多个域名之间用空格分开
+        # 全局定义，如果都是这一个目录，这样定义最简单。
+        root   /Users/yangyi/www;  
+        # root 表示在这整个 server 虚拟主机内，全部的 root web 根目录。注意要和 locate {} 下面定义的区分开来
+        index  index.php index.html index.htm;
+        # index 全局定义访问的默认首页地址。注意要和 locate {} 下面定义的区分开来
+        charset utf-8;   # 设置网页的默认编码格式
+        access_log  usr/local/var/log/host.access.log  main; 
+        # access_log 指定此虚拟主机的访问日志存放路径，最后的 main 用于指定访问日志的输出格式
+        error_log  usr/local/var/log/host.error.log  error;
+        。。。
+
+		server 标志定义虚拟主机开始。 
+		listen 用于指定虚拟主机的服务端口。 
+		server_name 用来指定IP地址或者域名，多个域名之间用空格分开。 
+		root 表示在这整个 server 虚拟主机内，全部的 root web 根目录。注意要和 locate {} 下面定义的区分开来。 
+		index 全局定义访问的默认首页地址。注意要和 locate {} 下面定义的区分开来。 
+		charset 用于设置网页的默认编码格式。 
+		access_log 用来指定此虚拟主机的访问日志存放路径。
+		main 用于指定访问日志的输出格式。
+	2.3.2：location
+	2.3.3：upstream 负载均衡模块
+		upstream iyangyi.com{
+		    ip_hash; # 调度算法
+		    server 192.168.12.1:80; # 服务器
+		    server 192.168.12.2:80 down;
+		    server 192.168.12.3:8080  max_fails=3  fail_timeout=20s;
+		    server 192.168.12.4:8080;
+		}
+		目前支持 4 中调度算法：
+			1、weight轮询
+			2、ip_hash
+			3、fair
+			4、url_hash
+		服务器定义后的“down”为状态，有以下状态：
+			down
+				表示当前的server暂时不参与负载均衡。
+			backup
+				预留的备份机器。当其他所有的非backup机器出现故障或者忙的时候，才会请求backup机器，因此这台机器的压力最轻。
+			max_fails
+				允许请求失败的次数，默认为1。当超过最大次数时，返回proxy_next_upstream 模块定义的错误。
+			fail_timeout
+				在经历了max_fails次失败后，暂停服务的时间。max_fails可以和fail_timeout一起使用。
+			注意 当负载调度算法为ip_hash时，后端服务器在负载均衡调度中的状态不能是weight和backup。
+
+3、修改配置文件重启时，发生[error] open() "/usr/local/nginx/logs/nginx.pid" failed (2: No such file or directory)
+	解决方案：指定配置文件路径：./nginx -c /usr/local/nginx/conf/nginx.conf

@@ -36,5 +36,14 @@
 				}
 			}
 			3: config package.json->scripts: 
-			"buildMac":"electron-builder --platform=mac --arch=x64",
-			"buildwin":"electron-builder --platform=win --arch=x64"
+			"buildMac":"electron-builder --mac --64",
+			"buildwin":"electron-builder --win --x64"
+
+2:solve the problem of "$ is not definded"
+	<script>
+      // 解决报错：“$ is not definded”
+      if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+      }
+    </script>

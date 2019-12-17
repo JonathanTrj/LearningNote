@@ -15,7 +15,6 @@
 结构性元素
     header、footer、aside、nav、article、section
 语义性元素
-    mark、progress、time、details、datalist、ruby、menu、command
     mark：突出显示
     progress：进度条
     time：显示时间
@@ -74,9 +73,9 @@ UI伪累选择器
 	background-clip:"border-box|padding-box|content-box" 向外裁剪区域
 	background-size
 动画
-	transitions
-	animations
-	transform (css attribute)
+	transform (css attribute) //定义2d变换
+	transitions //定义变换动画
+	animations //定义复杂动画规则
 数据存储
 	localsortage
 	sessionstorage
@@ -124,6 +123,7 @@ UI伪累选择器
 		旋转坐标空间：rotate()
 		缩放图形：scale()
 	9、图形组合与裁切
+		。。。
 
 6: media
 	<audio></audio>
@@ -137,9 +137,9 @@ UI伪累选择器
 	1:transform：2D变换
 		css属性：transform: none|<transform-functions>;
 		transform-functions:
-			translate()
+			translate(..px,...)
 			scale(),scaleX(),scaleY()
-			rotate()
+			rotate(..deg)
 			skew(),skewX(),skewY()
 		css属性:transform-origin: x-axis y-axis z-axis; //更改中心点
 	2:transitions过度动画
@@ -179,3 +179,7 @@ UI伪累选择器
 			linear-gradient(方向或角度，起始颜色，终点颜色)
 		2、径向渐变
 			radial-gradient(。。。，方向和大小，包含或覆盖)
+	5: 总结
+		1、对于 transform 与 transition，前者定义的是最后的呈现效果，后者定义的是中间的过度效果，所以前者在结果样式中编写，后者在初始样式中编写。
+		2、transform可以做出简单粗暴的动画效果，组合使用transition可以做出平滑的动画效果。
+		3、同样的，transform也可以与animations组合使用，制作出平滑的动画效果

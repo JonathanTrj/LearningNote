@@ -1,0 +1,36 @@
+前端发展趋势
+	2012
+		1、要求用有一个自己开发的兼容各个浏览器操作DOM的库，要求里面能够实现ajax
+		2、flash as3.0 硕思闪客 反编译国外的flash
+		3、原生JS ES3.0
+		4、网页三剑客 dw ps。。
+		5、jquery版本：this、闭包、原型链、面向对象
+		6、ie6双边距 hack
+	2014 移动端
+		1、后端的概念开始前移 MVC backbone.js
+		2、Webapp 手机浏览器 HTML5 CSS3 Storage Webworks
+		3、Canvas 游戏产品 2048 围住神经猫
+		4、Components <ss></ss> Angular DI AOP MVC MVVM
+		5、js的体积越来越大 -> js后移
+		6、SPA pushstate方式页面的路由
+		自己用有一个小后端
+		/a/b PHP -> Proxy (Java API)
+		7、ES5 ['a','b'].indexOf('a') zepto
+		8、cmd amd
+	2015 
+		1、Node.js 稳~ Linux 集群 负载均衡 cmd
+		2、ES6 Babel
+	2016
+		1、ES6发版本 NODEJS io.js koa2
+		2、Angular2 React Vue Redux Vuex Service(DI)
+		View这一层，从视图到后端API整个的链条
+		3、Angular Cordova React ReactNative
+		4、那我。js pc端的编程 React-VR Webgl 3D起来了
+	2017
+		百度ABC
+		AI Bigdata Cloud
+		1、如何用前端知识，进行AI ruff NodeBots
+		2、Bigdata 数据可视化 js图表CSS绘制图表
+		3、Cloud NodeJS
+
+浏览器兼容性主要针对移动端浏览器
