@@ -8,7 +8,7 @@ https://blog.csdn.net/qq_42314550/article/details/81805328
 Python+Django+Nginx+Uwsgi（史上最全步骤）
 
 https://blog.csdn.net/qianbin3200896/article/details/81166066
-基于Windows平台的Django本地部署和腾讯云服务器上部署（1）
+基于Windows平台的Django本地iis部署和腾讯云服务器上部署（1）
 
 成功：
 https://www.cnblogs.com/happyAzhan/p/11304696.html

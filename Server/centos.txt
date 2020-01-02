@@ -44,7 +44,7 @@
 					yum-...noarch.rpm
 					yum-metadata-parser-...x86_64.rpm
 					yum-plugin-fastestmirror-...noarch.rpm
-			5）开始安装python：rpm -ivh python-* rpm-python-*，若出现依赖错误，使用：rpm -ivh python-* rpm-python-* --nodeps --force
+			5）开始安装python：rpm -ivh python-* rmp-python-*，若出现依赖错误，使用：rpm -ivh python-* rpm-python-* --nodeps --force
 			6）开始安装yum：rpm -ivh yum-*
 	3：创建虚拟环境
 		1）pip install virtualenv, pip install virtualenvwrapper
@@ -57,7 +57,7 @@
 		3）创建虚拟环境：mkvirtualenv env_name
 		4）启动环境：workon env_name
 		5）退出环境：deactivate
-		6）删除环境：rmvirtualenv env_name
+		6）删除环境：rmvirtualenv env_nam
 	4：上传脚本
 		1）使用FileZilla通过FTP进行脚本上传
 	5：在后台运行python脚本
@@ -108,3 +108,26 @@
 		-s ：复制成为符号连结文件 (symbolic link)，亦即『快捷方式』档案；
 		-u ：若 destination 比 source 旧才更新 destination ！
 		最后需要注意的，如果来源档有两个以上，则最后一个目的文件一定要是『目录』才行！
+
+3:安装、更新sqlite3-3.7.18 to sqlite3-3.8.3
+	wget https://www.sqlite.org/2019/sqlite-autoconf-3270200.tar.gz
+	tar -zxvf sqlite-autoconf-3270200.tar.gz
+	cd sqlite-autoconf-3270200
+	./configure --prefix=/usr/local
+	make && make install
+	find /usr/ -name sqlite3
+
+	centos7自带sqlite3，升级：
+		sqlite3 --version
+		mv /usr/bin/sqlite3  /usr/bin/sqlite3.bak
+		ln -s /usr/local/bin/sqlite3 /usr/bin/sqlite3
+
+	设置开机自启动
+		vi ~/.bashrc
+		export LD_LIBRARY_PATH="/usr/local/lib"
+		source ~/.bashrc
+
+	检查python的sqlite版本
+		python
+		import sqlite3
+		sqlite3.sqlite_version

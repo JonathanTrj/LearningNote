@@ -1,0 +1,10 @@
+1、开发app
+	1、完成web app的开发
+	2、创建cordova项目
+		1、npm install -g cordova
+		2、cordova create <Project-name>
+		3、cordova platform add <platform>
+		4、将web app项目代码拷贝至www文件夹下
+			注意添加上默认的meta标签与cordova.js文件的引入
+		5、cordova build
+		6、cordova run <platform>

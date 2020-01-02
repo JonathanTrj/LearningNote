@@ -17,7 +17,7 @@
 		/a/b PHP -> Proxy (Java API)
 		7、ES5 ['a','b'].indexOf('a') zepto
 		8、cmd amd
-	2015 
+	2015
 		1、Node.js 稳~ Linux 集群 负载均衡 cmd
 		2、ES6 Babel
 	2016

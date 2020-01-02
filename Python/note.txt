@@ -12,7 +12,7 @@
 	a = 10 if a == 1 else 100
 	print(a)	# a = 10
 
-5、对于浮点数的整数化处理：
+5、浮点数 -> 整数
 	round() 取四舍五入值: round(3.8) => 4，还有带第二个参数的使用方法，略
 	math.floor() 往小取整
 	math.ceil() 往大取整
@@ -46,6 +46,27 @@
 	知道内容，不知道索引：l.remove("")
 	知道索引，不知道内容：del l[index]
 
+10、对于list的元素插入操作
+	insert() 指定位置插入数据，需要两个参数
+	append() 在list末尾插入数据
+
 10、list和str互相转换
 	list2str: "".join(l)
 	str2list: list(s)
+
+17、raise主动抛出异常，可以是系统内建异常，也可以是自定义异常：
+	1、内建异常
+		raise RuntimeError("testError")
+	2、自定义异常
+		class CustomError(Exception):
+		    def __init__(self,ErrorInfo):
+		        super().__init__(self) #初始化父类
+		        self.errorinfo=ErrorInfo
+		    def __str__(self):
+		        return self.errorinfo
+
+		if __name__ == '__main__':
+		    try:
+		        raise CustomError('客户异常')
+		    except CustomError as e:
+		        print(e)
