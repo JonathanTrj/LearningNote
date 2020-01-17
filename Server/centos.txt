@@ -1,4 +1,4 @@
-1:在服务器中运行python脚本
+1:centos7安装python
 	1：使用ssh（windows使用putty，mac使用终端）链接服务器
 	2：确定python版本
 		更新/安装新python（在centos中：）
@@ -131,3 +131,103 @@
 		python
 		import sqlite3
 		sqlite3.sqlite_version
+
+4:centos7安装LAMP（linux、apache、mysql、PHP）
+	1、安装apache
+		1、sudo yum install httpd
+		2、开机自启：sudo systemctl enable httpd.service
+		3、
+			启动apache：sudo systemctl start httpd.service
+			重启apache：sudo systemctl restart httpd.service
+			停止apache：sudo systemctl stop httpd.service
+		4、开启防火墙的http与https访问
+			sudo firewall-cmd --permanent --zone=public --add-service=http
+			sudo firewall-cmd --permanent --zone=public --add-service=httpssudo firewall-cmd --reload
+			* 如果报错“ModuleNotFoundError: No module named 'gi'”：
+				因为装了python3，需要：
+					vim /usr/bin/firewall-cmd
+					vim /usr/sbin/firewalld
+				将第一行的python执行环境指向原python2
+	2、安装mysql
+		MariaDB is a fork of the popular cross-platform MySQL database management system and is considered a full drop-in replacement for MySQL.
+		1、安装
+			1、sudo yum update
+			2、sudo yum install mariadb-server
+			3、开机自启：sudo systemctl enable mariadb
+			4、sudo systemctl start mariadb
+			5、To address several security concerns in a default MariaDB installation, run: "sudo mysql_secure_installation"
+		2、使用
+			1、登录：mysql -u root -p
+			2、“\h” for help
+			3、创建数据库与用户
+				create database testdb;
+				create user 'testuser'@localhost identified by 'password';
+				grant all on testdb.* to 'testuser' identified by 'password';
+			4、创建表
+				use testdb;
+				create table customers (customer_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, first_name TEXT, last_name TEXT);
+				show tables;
+		3、修改root密码
+			1、
+				sudo systemctl stop mariadb
+				sudo mysqld_safe --skip-grant-tables &
+			2、mysql -u root
+			3、
+				use mysql;
+				update user SET PASSWORD=PASSWORD("password") WHERE USER='root';
+				flush privileges;
+				exit
+			4、sudo systemctl start mariadb
+	3、安装PHP
+		1、sudo yum install php php-mysql
+		2、sudo systemctl restart httpd.service
+		3、在命令行终端敲入这条命令，你就可以找到所有可以获取到的 PHP 模块选项和库：
+			$ yum search php
+			$ yum info package_name
+		4、测试安装
+			1、sudo vi /var/www/html/info.php
+			2、<?php phpinfo(); ?>
+			3、访问：ip+“/info.php”
+			4、rm info.php
+
+5:centos7使用apache部署多个web项目
+	1、如4，安装LAMP
+	2、创建项目目录（-p可以递归创建新目录）
+		mkdir –p /var/www/webapp1/html
+		mkdir –p /var/www/webapp2/html
+		设置权限：
+			chmod –R 755 /var/www
+	3、上传项目文件
+	4、创建新的虚拟主机文件
+		1、准备：创建用以存放虚拟主机的目录，以及用以向 Apache 表明一台虚拟主机已经做好准备向访问者提供服务的目录。 sites-available 目录将会存放所有的虚拟主机文件，而 sites-enabled 目录将会存放我们想对外提供服务的主机的符号链接。我们可以借助下列命令来创建这两个目录：
+			$ sudo mkdir /etc/httpd/sites-available
+			$ sudo mkdir /etc/httpd/sites-enabled
+			编辑 Apache 的主配置文件，添加一行用以声明额外配置文件所在的可选目录：
+				$ sudo vi /etc/httpd/conf/httpd.conf
+				将下面这一行添加到文件的末尾：
+				IncludeOptional sites-enabled/*.conf
+		2、创建：
+			vi /etc/httpd/sites-available/webapp1.conf
+			"
+				Listen port
+				<VirtualHost *:port>
+					ServerName www.webapp1.com
+					ServerAlias webapp1.com
+					DocumentRoot /var/www/webapp1/html
+					ErrorLog /var/www/webapp1/error.log
+					CustomLog /var/www/webapp1/request.log combined
+				</VirtualHost>
+			"
+			vi /etc/httpd/sites-available/webapp2.conf
+			"
+				AS BEFORE
+			"
+		3、创建软连接，告知可用
+			ln -s /etc/httpd/sites-available/webapp1.conf /etc/httpd/sites-enabled/webapp1.conf
+			ln -s /etc/httpd/sites-available/webapp2.conf /etc/httpd/sites-enabled/webapp2.conf
+			systemctl restart httpd
+		4、开放防火墙端口
+			sudo firewall-cmd --permanent --add-port=8000/tcp
+			sudo firewall-cmd --permanent --add-port=8001/tcp
+			firewall-cmd --reload
+		5、浏览器访问

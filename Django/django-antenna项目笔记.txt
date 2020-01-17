@@ -12,6 +12,7 @@
 		1：django默认自带session实现，实现方式有数据库、cache等
 		2：使用数据库实现：执行 python manage.py migrate
 		3：在 views.py 中通过 request.session[''] = .. 设置session，通过 request.session.get('') 获得session
+		4：获取session id：request.session.session_key
 	2）文件下载（StreamingHttpResponse）
 		1：定义方法，实现文件的流读取
 			def file_iterator(file, chunk_size=1024):
